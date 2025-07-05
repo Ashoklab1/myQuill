@@ -1,0 +1,35 @@
+# Python
+*.pyc
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.venv/
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Django specific
+*.log
+*.sqlite3
+db.sqlite3
+/media/ # User-uploaded files
+/assets/ # Collected static files (STATIC_ROOT)
+/staticfiles/ # Another common name for STATIC_ROOT
+/static_cdn/ # Another common name for STATIC_ROOT
+
+# Environment variables
+.env
+.flaskenv
+
+# IDEs
+.vscode/ # VS Code specific settings (optional, but often good to ignore workspace-specific settings)
+.idea/ # PyCharm/IntelliJ IDEA
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store # macOS
+Thumbs.db # Windows
+ehthumbs.db # Windows
