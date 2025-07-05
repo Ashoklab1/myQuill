@@ -1,0 +1,114 @@
+{# /home/ashoklab/my-pythonDjango1/myQuill/templates/posts/post_page.html #}
+{% extends 'layout.html' %}
+{% load tz %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+
+{% block content %}
+{# IMPORTANT: Tailwind CSS CDN and Google Fonts should ONLY be in layout.html. #}
+{# These lines are removed from here to prevent duplication and ensure proper loading order. #}
+{# <script src="https://cdn.tailwindcss.com"></script> #}
+{# <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"> #}
+<style>
+    /* This style block should ideally be in your custom style.css file, not inline here. */
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f3f4f6; /* Light gray background */
+    }
+    /* Basic styling for CKEditor content if needed */
+    .prose img { /* Changed from .post-body img to .prose img as per Tailwind's prose plugin */
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem; /* rounded-lg */
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    .prose p { /* Changed from .post-body p to .prose p */
+        margin-bottom: 1rem;
+    }
+</style>
+
+<section class="max-w-3xl w-full bg-white shadow-xl rounded-lg p-8 mx-auto my-12 space-y-8">
+    {% if post.banner %}
+        <img class="w-full h-64 object-cover rounded-lg shadow-md mb-6" src="{{ post.banner.url }}" alt="{{ post.title }}">
+    {% else %}
+        {# Placeholder image if no banner is provided, for better UX #}
+        <img class="w-full h-64 object-cover rounded-lg shadow-md mb-6" src="https://placehold.co/800x400/eeeeee/333333?text=No+Banner+Image" alt="No Banner Available">
+    {% endif %}
+
+    <div class="text-center">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-4">{{ post.title }}</h1>
+        <p class="text-sm text-gray-500 mb-2">
+            Published on: {% timezone "Asia/Kolkata" %}{{ post.date|date:"F j, Y, P" }} IST{% endtimezone %}
+        </p>
+        <p class="text-md font-medium text-gray-700">By: {{ post.author.username }}</p>
+        {% if post.category %}
+            <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-0.5 text-sm font-medium text-blue-800 mt-2">
+                {{ post.category.name }}
+            </span>
+        {% endif %}
+        {% if post.tags.all %}
+            <div class="mt-2 flex flex-wrap justify-center gap-2">
+                {% for tag in post.tags.all %}
+                    <span class="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                        {{ tag.name }}
+                    </span>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <hr class="my-8 border-t border-gray-200">
+
+    <div class="prose max-w-none text-gray-800 leading-relaxed">
+        {{ post.body|safe }}
+    </div>
+
+    {% if post.post_images.all %}
+        <hr class="my-8 border-t border-gray-200">
+        <h3 class="text-2xl font-bold text-gray-900 mb-6">Image Gallery</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 image-gallery">
+            {% for image in post.post_images.all %}
+                <div class="relative overflow-hidden rounded-lg shadow-md">
+                    <img class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105" src="{{ image.image.url }}" alt="{{ image.caption|default:'Gallery image' }}">
+                    {% if image.caption %}
+                        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-sm p-2">
+                            {{ image.caption }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <hr class="my-8 border-t border-gray-200">
+
+    {# Comments Section #}
+    <div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-6">🗨️ Comments</h3>
+        <div id="comment-list" class="space-y-6">
+            {% include 'posts/_comment_list.html' %} {# This partial will display the comments #}
+        </div>
+    </div>
+
+    <hr class="my-8 border-t border-gray-200">
+
+    {# Leave a Comment Form #}
+    <div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-6">➕ Leave a Comment</h3>
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'myQuill:post_detail' slug=post.slug %}" class="space-y-4">
+                {% csrf_token %} {# Django's security token #}
+                {{ comment_form.as_p }} {# Render form fields. Widgets from forms.py will apply styling. #}
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Submit Comment
+                </button>
+            </form>
+        {% else %}
+            <p class="text-center text-gray-600 italic">Please <a href="{% url 'users:login' %}" class="text-indigo-600 hover:underline">log in</a> to leave a comment.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

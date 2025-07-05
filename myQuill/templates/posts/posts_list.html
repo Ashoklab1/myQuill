@@ -1,0 +1,164 @@
+{# /home/ashoklab/my-pythonDjango1/myQuill/templates/posts/posts_list.html #}
+{% extends 'layout.html' %}
+{% load tz %} {# Keep load tz if you use it for timezone formatting #}
+{# REMOVED: {% load static %} is not needed here if layout.html loads it #}
+
+{% block title %}
+    Posts
+{% endblock %}
+
+{% block content %}
+{# REMOVED: Tailwind CSS CDN and Google Fonts should ONLY be in layout.html. #}
+{# REMOVED: Inline <style> block should be in your custom style.css file. #}
+<style>
+    /* Custom style for checkbox to make it visually align better with Tailwind */
+    input[type="checkbox"] {
+        width: 1rem; /* 16px */
+        height: 1rem; /* 16px */
+        color: #4f46e5; /* indigo-600 */
+        background-color: #f9fafb; /* gray-100 */
+        border-color: #d1d5db; /* gray-300 */
+        border-radius: 0.25rem; /* rounded */
+    }
+    label {
+        display: block; /* Ensure labels are block level for better spacing */
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; /* font-medium */
+        color: #374151; /* text-gray-700 */
+        margin-bottom: 0.5rem; /* mb-2 */
+    }
+</style>
+
+<div class="flex flex-col md:flex-row gap-8 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    {# Filter Sidebar #}
+    <div class="filter-sidebar w-full md:w-1/4 bg-white shadow-lg rounded-lg p-6 h-fit sticky top-4">
+        <h3 class="text-2xl font-bold text-gray-900 mb-6">🔍 Filter Options</h3>
+        <form id="filter-form" method="get" class="space-y-6">
+            <div class="mb-4">
+                <h4 class="text-lg font-semibold text-gray-800 mb-3">🗂️ Search Posts</h4>
+                <input type="text" name="q" placeholder="Search by title or content..." value="{{ query|default:'' }}"
+                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md py-2 px-3">
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-lg font-semibold text-gray-800 mb-3">🏷️ Filter by Tags</h4>
+                <div class="space-y-2">
+                    {% for tag in tags %}
+                        <label class="inline-flex items-center text-gray-700 cursor-pointer">
+                            <input type="checkbox" name="tags" value="{{ tag.name }}"
+                                {% if tag.name in selected_tags %}checked{% endif %}
+                                class="form-checkbox">
+                            <span class="ml-2 text-sm">{{ tag.name }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-lg font-semibold text-gray-800 mb-3">📅 Filter by Month</h4>
+                <select name="month" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="">-- Select Month --</option>
+                    {% for num, name in months %}
+                        <option value="{{ num }}" {% if month == num %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-lg font-semibold text-gray-800 mb-3">📅 Filter by Year</h4>
+                <input type="text" name="year" placeholder="e.g. 2025" value="{{ year|default:'' }}"
+                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md py-2 px-3">
+            </div>
+
+            <div class="mb-6">
+                <h4 class="text-lg font-semibold text-gray-800 mb-3">🔽 Sort Posts By</h4>
+                <select name="sort" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="date" {% if sort == "date" %}selected{% endif %}>Newest First</option>
+                    <option value="title" {% if sort == "title" %}selected{% endif %}>Title (A-Z)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Apply Filters
+            </button>
+        </form>
+    </div>
+
+    {# Posts Section #}
+    <div class="posts-section flex-1 w-full">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-8 text-center md:text-left">📝 All Posts</h1>
+        {# This div will be updated by AJAX #}
+        <div id="post-list" class="space-y-8">
+            {% include 'posts/_posts_partial.html' %}
+        </div>
+    </div>
+</div>
+
+<script>
+    const filterForm = document.getElementById('filter-form');
+    const postListContainer = document.getElementById('post-list');
+    let loadMoreBtn = document.getElementById('load-more-btn'); // Get reference on initial load
+
+    function serializeForm(form) {
+        const formData = new FormData(form);
+        return new URLSearchParams(formData).toString();
+    }
+
+    function fetchAndRender(url, append = false) {
+        fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (append) {
+                postListContainer.insertAdjacentHTML('beforeend', data.html);
+            } else {
+                postListContainer.innerHTML = data.html;
+            }
+
+            loadMoreBtn = document.getElementById('load-more-btn');
+
+            if (loadMoreBtn) {
+                if (data.next_page) {
+                    loadMoreBtn.dataset.nextPage = data.next_page;
+                    loadMoreBtn.style.display = 'block';
+                } else {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching posts:', error);
+        });
+    }
+
+    filterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const query = serializeForm(filterForm);
+        fetchAndRender(`?${query}`);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.id === 'load-more-btn') {
+            const nextPage = e.target.dataset.nextPage;
+            if (nextPage) {
+                const query = serializeForm(filterForm);
+                fetchAndRender(`?page=${nextPage}&${query}`, true);
+            }
+        }
+    });
+</script>
+{% endblock %}
+
+{# REMOVED: These blocks are invalid here. They should be defined in layout.html if needed. #}
+{# {% block extra_css %} #}
+{#    <link rel="stylesheet" href="{% static 'css/custom.css' %}"> #}
+{# {% endblock %} #}
+{# {% block extra_js %} #}
+{#    <script src="{% static 'js/custom.js' %}"></script> #}
+{# {% endblock %} #}

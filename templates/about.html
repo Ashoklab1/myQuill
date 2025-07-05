@@ -1,0 +1,30 @@
+{# C:\Users\ashok_wsg2ds5\my-pythonDjango1\templates\about.html #}
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8 bg-white shadow-xl rounded-lg mt-8 text-gray-800">
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-6 text-center">About My Blog</h1>
+
+    <p class="mb-4 leading-relaxed">
+        Welcome to My Blog! This platform is a personal project dedicated to sharing insights, stories, and reflections on a variety of topics that matter. From technology and current events to personal development and creative pursuits, the aim is to provide thoughtful content that sparks curiosity and encourages discussion.
+    </p>
+
+    <p class="mb-4 leading-relaxed">
+        I believe in the power of words to connect, inform, and inspire. This blog is a space where ideas can be explored freely, and readers can find content that resonates with their interests and challenges their perspectives.
+    </p>
+
+    <p class="leading-relaxed">
+        Thank you for visiting and being a part of this journey. Feel free to explore the posts, leave your comments, and share your own thoughts. Your engagement makes this community vibrant!
+    </p>
+
+    <div class="mt-8 text-center">
+        <a href="{% url 'myQuill:post_list' %}"
+           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+            Explore All Posts &rarr;
+        </a>
+    </div>
+</div>
+{% endblock %}
