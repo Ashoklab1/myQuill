@@ -1,34 +1,32 @@
-# C:\Users\ashok_wsg2ds5\my-pythonDjango1\users\views.py
+# my-pythonDjango1/users/views.py
 
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+# Import your custom forms
+from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from django.contrib.auth import login, logout
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST) # Use custom form
         if form.is_valid():
             user = form.save()
             login(request, user)
-            # CORRECTED: Changed 'posts:post_list' to 'myQuill:post_list'
             return redirect('myQuill:post_list')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm() # Use custom form
     return render(request, 'users/register.html', {"form": form})
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = CustomAuthenticationForm(data=request.POST) # Use custom form
         if form.is_valid():
             login(request, form.get_user())
-            # CORRECTED: Changed 'posts:post_list' to 'myQuill:post_list'
             return redirect(request.POST.get("next") or 'myQuill:post_list')
     else:
-        form = AuthenticationForm()
+        form = CustomAuthenticationForm() # Use custom form
     return render(request, 'users/login.html', {"form": form})
 
 def logout_view(request):
     if request.method == "POST":
         logout(request)
-    # CORRECTED: Changed 'posts:post_list' to 'myQuill:post_list'
     return redirect('myQuill:post_list')
