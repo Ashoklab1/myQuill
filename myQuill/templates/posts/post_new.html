@@ -12,9 +12,10 @@
 {# <script src="https://cdn.tailwindcss.com"></script> #}
 {# <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"> #}
 <style>
+    /* This style block should ideally be in your custom style.css file, not inline here. */
     body {
         font-family: 'Inter', sans-serif;
-        background-color: #f3f4f6; /* Light gray background */
+        background-color: var(--bg-color); /* Use variable */
     }
     /* Styles for CKEditor if its default rendering needs adjustment within Tailwind context */
     .ck-editor__editable_inline {
@@ -22,20 +23,32 @@
         border-radius: 0.5rem; /* rounded-lg */
         padding: 0.75rem 1rem; /* py-3 px-4 */
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-        border: 1px solid #d1d5db; /* border-gray-300 */
+        border: 1px solid var(--input-border); /* Use variable for border */
+        background-color: var(--input-bg); /* Use variable for background */
+        color: var(--input-text); /* Use variable for text */
     }
     /* Ensure labels are properly styled */
     label {
         display: block;
         font-size: 0.875rem; /* text-sm */
         font-weight: 500; /* font-medium */
-        color: #374151; /* text-gray-700 */
+        color: var(--card-text); /* Use variable for label color */
         margin-bottom: 0.5rem; /* mb-2 */
+    }
+    /* Styles for input/select/textarea within this template, if not covered by global rules */
+    section input:not([type="checkbox"]):not([type="radio"]),
+    section select,
+    section textarea {
+        background-color: var(--input-bg);
+        color: var(--input-text);
+        border-color: var(--input-border);
     }
 </style>
 
-<section class="max-w-3xl w-full bg-white shadow-xl rounded-lg p-8 mx-auto my-12 space-y-8">
-    <h1 class="text-3xl font-bold text-gray-900 text-center mb-6">Create New Post</h1>
+{# CORRECTED: Added content-card and removed hardcoded bg-white and text colors #}
+<section class="max-w-3xl w-full shadow-xl rounded-lg p-8 mx-auto my-12 space-y-8 content-card">
+    {# CORRECTED: Removed hardcoded text color #}
+    <h1 class="text-3xl font-bold text-center mb-6">Create New Post</h1>
 
     {# CORRECTED: Changed action URL to 'myQuill:new_post' #}
     <form class="space-y-6" action="{% url 'myQuill:new_post' %}" method="post" enctype="multipart/form-data">
@@ -46,13 +59,13 @@
         {% for field in form %}
             <div class="mb-4">
                 {% if field.field.widget.input_type != 'checkbox' %}
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-2">
                         {{ field.label }}
                     </label>
                 {% endif %}
                 {{ field }}
                 {% if field.help_text %}
-                    <p class="mt-2 text-sm text-gray-500">{{ field.help_text }}</p>
+                    <p class="mt-2 text-sm">{{ field.help_text }}</p>
                 {% endif %}
                 {% for error in field.errors %}
                     <p class="mt-2 text-sm text-red-600">{{ error }}</p>
@@ -60,21 +73,23 @@
             </div>
         {% endfor %}
 
-        <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-6">Upload Gallery Images</h3>
+        {# CORRECTED: Removed hardcoded text color #}
+        <h3 class="text-2xl font-bold mt-8 mb-6">Upload Gallery Images</h3>
         <div id="image-formset" class="space-y-4">
             {{ formset.management_form }}
             {% for form in formset %}
-                <div class="border border-gray-200 p-4 rounded-lg shadow-sm">
+                {# CORRECTED: Added content-card for inner formset div #}
+                <div class="border p-4 rounded-lg shadow-sm content-card">
                     {% for field in form %}
                         <div class="mb-4">
                             {% if field.field.widget.input_type != 'checkbox' %}
-                                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-2">
                                     {{ field.label }}
                                 </label>
                             {% endif %}
                             {{ field }}
                             {% if field.help_text %}
-                                <p class="mt-2 text-sm text-gray-500">{{ field.help_text }}</p>
+                                <p class="mt-2 text-sm">{{ field.help_text }}</p>
                             {% endif %}
                             {% for error in field.errors %}
                                 <p class="mt-2 text-sm text-red-600">{{ error }}</p>

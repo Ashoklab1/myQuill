@@ -1,41 +1,40 @@
- // C:\Users\ashok_wsg2ds5\my-pythonDjango1\static\js\main.js
+// C:\Users\ashok_wsg2ds5\my-pythonDjango1\static\js\main.js
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Get references to the elements by their IDs
+        console.log("main.js: DOMContentLoaded fired."); // Log on DOM ready
+
         const toggle = document.getElementById('theme-toggle');
-        const body = document.body; // The <body> element is directly accessible
+        const body = document.body;
         const icon = document.getElementById('theme-icon');
         const label = document.getElementById('theme-label');
 
-        // Function to apply the theme (dark or light)
+        console.log("main.js: toggle element found?", !!toggle); // Log if toggle is found
+        console.log("main.js: body element found?", !!body); // Log if body is found
+
         function setTheme(theme) {
+            console.log("main.js: setTheme called with theme:", theme); // Log when setTheme is called
             if (theme === 'dark') {
-                body.classList.add('dark-mode'); // Add dark-mode class to body
-                if (icon) icon.textContent = '☀️'; // Change icon to sun, check if icon exists
-                if (label) label.textContent = 'Light Mode'; // Label should say "Light Mode" when dark mode is ON
-            } else { // theme is 'light'
-                body.classList.remove('dark-mode'); // Remove dark-mode class from body
-                if (icon) icon.textContent = '🌙'; // Change icon to moon, check if icon exists
-                if (label) label.textContent = 'Dark Mode'; // Label should say "Dark Mode" when dark mode is OFF
+                body.classList.add('dark-mode');
+                if (icon) icon.textContent = '☀️';
+                if (label) label.textContent = 'Light Mode';
+            } else {
+                body.classList.remove('dark-mode');
+                if (icon) icon.textContent = '🌙';
+                if (label) label.textContent = 'Dark Mode';
             }
-            localStorage.setItem('theme', theme); // Save preference in browser's local storage
+            localStorage.setItem('theme', theme);
+            console.log("main.js: body classes after setTheme:", body.classList.value); // Log body classes
         }
 
-        // --- Initialization on page load ---
-        // Get saved theme from localStorage, default to 'light' if no preference is saved
         const savedTheme = localStorage.getItem('theme') || 'light';
-        // Apply the saved theme immediately when the page loads
-        setTheme(savedTheme);
+        setTheme(savedTheme); // Initial theme application
+        console.log("main.js: Initial theme applied:", savedTheme);
 
-        // --- Event Listener for Toggle Button ---
-        // Only attach the event listener if the toggle button element is found
         if (toggle) {
             toggle.addEventListener('click', () => {
-                // Determine the NEW theme based on the *current* state of the body
-                // If body currently has 'dark-mode', the new theme will be 'light'.
-                // If body currently does NOT have 'dark-mode', the new theme will be 'dark'.
+                console.log("main.js: Toggle button clicked!"); // Log on click
                 const newTheme = body.classList.contains('dark-mode') ? 'light' : 'dark';
-                setTheme(newTheme); // Apply the new theme
+                setTheme(newTheme);
             });
         } else {
             console.warn("Theme toggle button with ID 'theme-toggle' not found.");

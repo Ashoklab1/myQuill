@@ -1,4 +1,4 @@
-{# /home/ashoklab/my-pythonDjango1/myQuill/templates/posts/_comment_list.html #}
+{# C:\Users\ashok_wsg2ds5\my-pythonDjango1\myQuill\templates\posts\_comment_list.html #}
 
 {# This partial expects a 'comments' context variable (a queryset of Comment objects) #}
 {# It is designed to be included in posts/post_page.html #}
@@ -6,16 +6,20 @@
 {% if comments %}
     <div class="space-y-6"> {# Add vertical spacing between comments #}
         {% for comment in comments %}
-            <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
-                <p class="text-lg font-semibold text-gray-800 mb-1">
+            {# CORRECTED: Removed hardcoded bg-gray-50, shadow-sm, border, border-gray-200 #}
+            <div class="p-6 rounded-lg shadow-sm border content-card"> {# Use content-card for background/text #}
+                {# CORRECTED: Removed hardcoded text-lg font-semibold text-gray-800 #}
+                <p class="font-semibold mb-1">
                     {{ comment.body|linebreaksbr }} {# Use linebreaksbr for <br> tags instead of <p> for comments #}
                 </p>
-                <p class="text-sm text-gray-600 mt-2">
+                {# CORRECTED: Removed hardcoded text-sm text-gray-600 #}
+                <p class="text-sm mt-2">
                     <span class="font-medium">By:</span> {{ comment.author.username }} on {{ comment.date|date:"F j, Y, P" }}
                 </p>
             </div>
         {% endfor %}
     </div>
 {% else %}
-    <p class="text-gray-600 italic">No comments yet.</p>
+    {# CORRECTED: Removed hardcoded text-gray-600 #}
+    <p class="italic">No comments yet.</p>
 {% endif %}

@@ -1,0 +1,153 @@
+/* /home/ashoklab/my-pythonDjango1/static/css/style.css */
+
+/* Reset and Box Model */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Theme Variables */
+:root {
+    --bg-color: #ffffff;
+  --text-color: #1f2937;
+    --link-color: #007bff;
+    --nav-bg: #f1f1f1;
+    --card-bg: #ffffff;
+    --card-text: #374151;
+    --border-color: #e2e8f0;
+    --input-bg: #ffffff;
+    --input-text: #374151;
+    --input-border: #d1d5db;
+    --button-bg: #4a5568; /* Default button background */
+    --button-text: #ffffff; /* Default button text */
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #f1f1f1;
+    --link-color: #80d0ff;
+    --nav-bg: #1f1f1f;
+    --card-bg: #1a202c;
+    --card-text: #e2e8f0;
+    --border-color: #2d3748;
+    --input-bg: #2d3748;
+    --input-text: #f1f1f1;
+    --input-border: #4a5568;
+    --button-bg: #6366f1; /* Dark mode button background (e.g., indigo) */
+    --button-text: #ffffff;
+}
+
+/* Base Styles */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Links */
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+a:hover {
+    opacity: 0.85;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--nav-bg);
+    border-bottom: 1px solid var(--border-color);
+    /* Other navbar styles (display, padding, etc.) can remain as direct CSS or Tailwind */
+}
+
+/* Theme Toggle Button Specific Styling */
+#theme-toggle {
+    background-color: var(--button-bg); /* Use variable for background */
+    color: var(--button-text); /* Use variable for text color */
+    border: 1px solid var(--border-color); /* Use variable for border */
+    /* Hover styles can still be Tailwind or custom CSS */
+    /* The hover:bg-gray-600 will override if not careful.
+       Consider removing hover:bg-gray-600 from HTML and adding a custom hover rule here: */
+    /* &:hover { background-color: var(--button-hover-bg); } */
+}
+/* If you want the hover to also be theme-aware: */
+.dark-mode #theme-toggle:hover {
+    background-color: var(--link-color); /* Example: hover to link color in dark mode */
+}
+/* If you keep hover:bg-gray-600 in HTML, it will always be gray-600 on hover. */
+
+
+/* General Section/Card Styling */
+.content-card {
+    background-color: var(--card-bg);
+    color: var(--card-text);
+    border: 1px solid var(--border-color);
+}
+
+/* Input/Select/Textarea Styling */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border-color: var(--input-border);
+}
+
+/* Custom style for checkbox */
+input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    color: var(--link-color);
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    border-radius: 0.25rem;
+}
+
+/* Labels */
+label {
+    color: var(--card-text);
+}
+
+/* Headings (ensure they use text-color or card-text) */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+}
+.content-card h1, .content-card h2, .content-card h3, .content-card h4, .content-card h5, .content-card h6 {
+    color: var(--card-text);
+}
+
+/* Post list article cards */
+.post-article-card {
+    background-color: var(--card-bg);
+    color: var(--card-text);
+    border: 1px solid var(--border-color);
+}
+.post-article-card h2 a {
+    color: var(--link-color);
+}
+.post-article-card p {
+    color: var(--card-text);
+}
+/* For categories/tags in post list */
+.category-tag-span { /* Use this class in HTML instead of bg-blue-100/bg-green-100 */
+    background-color: var(--link-color); /* Example: use link color for tags */
+    color: var(--bg-color); /* Example: use background color for tag text */
+}
+
+/* Comments */
+.comment-card { /* Give your comment div in _comment_list.html this class */
+    background-color: var(--card-bg);
+    color: var(--card-text);
+    border: 1px solid var(--border-color);
+}
+.comment-card p {
+    color: var(--card-text);
+}
+.comment-card p span { /* For "By:" text */
+    color: var(--card-text);
+}

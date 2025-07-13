@@ -1,7 +1,6 @@
-{# /home/ashoklab/my-pythonDjango1/myQuill/templates/posts/posts_list.html #}
+{# C:\Users\ashok_wsg2ds5\my-pythonDjango1\myQuill\templates\posts\posts_list.html #}
 {% extends 'layout.html' %}
 {% load tz %} {# Keep load tz if you use it for timezone formatting #}
-{# REMOVED: {% load static %} is not needed here if layout.html loads it #}
 
 {% block title %}
     Posts
@@ -15,36 +14,44 @@
     input[type="checkbox"] {
         width: 1rem; /* 16px */
         height: 1rem; /* 16px */
-        color: #4f46e5; /* indigo-600 */
-        background-color: #f9fafb; /* gray-100 */
-        border-color: #d1d5db; /* gray-300 */
+        color: var(--link-color); /* Use variable for checkbox color */
+        background-color: var(--input-bg); /* Use variable for background */
+        border-color: var(--input-border); /* Use variable for border */
         border-radius: 0.25rem; /* rounded */
     }
     label {
         display: block; /* Ensure labels are block level for better spacing */
         font-size: 0.875rem; /* text-sm */
         font-weight: 500; /* font-medium */
-        color: #374151; /* text-gray-700 */
+        color: var(--card-text); /* Use variable for label color */
         margin-bottom: 0.5rem; /* mb-2 */
+    }
+    /* Styles for input/select/textarea within this template, if not covered by global rules */
+    .filter-sidebar input[type="text"],
+    .filter-sidebar select {
+        background-color: var(--input-bg);
+        color: var(--input-text);
+        border-color: var(--input-border);
     }
 </style>
 
 <div class="flex flex-col md:flex-row gap-8 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
     {# Filter Sidebar #}
-    <div class="filter-sidebar w-full md:w-1/4 bg-white shadow-lg rounded-lg p-6 h-fit sticky top-4">
-        <h3 class="text-2xl font-bold text-gray-900 mb-6">🔍 Filter Options</h3>
+    {# CORRECTED: Added content-card and removed hardcoded bg-white and text colors #}
+    <div class="filter-sidebar w-full md:w-1/4 shadow-lg rounded-lg p-6 h-fit sticky top-4 content-card">
+        <h3 class="text-2xl font-bold mb-6">🔍 Filter Options</h3>
         <form id="filter-form" method="get" class="space-y-6">
             <div class="mb-4">
-                <h4 class="text-lg font-semibold text-gray-800 mb-3">🗂️ Search Posts</h4>
+                <h4 class="text-lg font-semibold mb-3">🗂️ Search Posts</h4>
                 <input type="text" name="q" placeholder="Search by title or content..." value="{{ query|default:'' }}"
-                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md py-2 px-3">
+                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md py-2 px-3">
             </div>
 
             <div class="mb-4">
-                <h4 class="text-lg font-semibold text-gray-800 mb-3">🏷️ Filter by Tags</h4>
+                <h4 class="text-lg font-semibold mb-3">🏷️ Filter by Tags</h4>
                 <div class="space-y-2">
                     {% for tag in tags %}
-                        <label class="inline-flex items-center text-gray-700 cursor-pointer">
+                        <label class="inline-flex items-center cursor-pointer">
                             <input type="checkbox" name="tags" value="{{ tag.name }}"
                                 {% if tag.name in selected_tags %}checked{% endif %}
                                 class="form-checkbox">
@@ -55,8 +62,8 @@
             </div>
 
             <div class="mb-4">
-                <h4 class="text-lg font-semibold text-gray-800 mb-3">📅 Filter by Month</h4>
-                <select name="month" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <h4 class="text-lg font-semibold mb-3">📅 Filter by Month</h4>
+                <select name="month" class="mt-1 block w-full py-2 px-3 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     <option value="">-- Select Month --</option>
                     {% for num, name in months %}
                         <option value="{{ num }}" {% if month == num %}selected{% endif %}>{{ name }}</option>
@@ -65,14 +72,14 @@
             </div>
 
             <div class="mb-4">
-                <h4 class="text-lg font-semibold text-gray-800 mb-3">📅 Filter by Year</h4>
+                <h4 class="text-lg font-semibold mb-3">📅 Filter by Year</h4>
                 <input type="text" name="year" placeholder="e.g. 2025" value="{{ year|default:'' }}"
-                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md py-2 px-3">
+                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md py-2 px-3">
             </div>
 
             <div class="mb-6">
-                <h4 class="text-lg font-semibold text-gray-800 mb-3">🔽 Sort Posts By</h4>
-                <select name="sort" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <h4 class="text-lg font-semibold mb-3">🔽 Sort Posts By</h4>
+                <select name="sort" class="mt-1 block w-full py-2 px-3 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     <option value="date" {% if sort == "date" %}selected{% endif %}>Newest First</option>
                     <option value="title" {% if sort == "title" %}selected{% endif %}>Title (A-Z)</option>
                 </select>
@@ -86,7 +93,8 @@
 
     {# Posts Section #}
     <div class="posts-section flex-1 w-full">
-        <h1 class="text-3xl font-extrabold text-gray-900 mb-8 text-center md:text-left">📝 All Posts</h1>
+        {# CORRECTED: Removed hardcoded text color #}
+        <h1 class="text-3xl font-extrabold mb-8 text-center md:text-left">📝 All Posts</h1>
         {# This div will be updated by AJAX #}
         <div id="post-list" class="space-y-8">
             {% include 'posts/_posts_partial.html' %}
@@ -157,8 +165,8 @@
 
 {# REMOVED: These blocks are invalid here. They should be defined in layout.html if needed. #}
 {# {% block extra_css %} #}
-{#    <link rel="stylesheet" href="{% static 'css/custom.css' %}"> #}
+{#     <link rel="stylesheet" href="{% static 'css/custom.css' %}"> #}
 {# {% endblock %} #}
 {# {% block extra_js %} #}
-{#    <script src="{% static 'js/custom.js' %}"></script> #}
+{#     <script src="{% static 'js/custom.js' %}"></script> #}
 {# {% endblock %} #}
