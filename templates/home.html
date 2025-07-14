@@ -2,13 +2,12 @@
 {% extends 'layout.html' %}
 {% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}My-Quill Home{% endblock %} {# Updated title block #}
 
 {% block content %}
-{# Add content-card class here #}
 <div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center shadow-xl rounded-lg mt-8 content-card">
-    {# CORRECTED: Removed hardcoded text color classes #}
-    <h1 class="text-4xl font-extrabold mb-4">Dear WORLD! Welcome to My Blog 🏠</h1>
+    {# Renamed main heading #}
+    <h1 class="text-4xl font-extrabold mb-4">Welcome to My-Quill Home 🏠</h1>
     <h5 class="text-xl mb-6">Discover Stories, Ideas & Insights That Matter</h5>
     <h3 class="text-2xl font-semibold mb-4">Feel free to explore the site!</h3>
     <h4 class="text-lg leading-relaxed mb-8">
@@ -30,7 +29,6 @@
 
     <hr class="my-8 border-t border-gray-200">
 
-    {# CORRECTED: Removed hardcoded text color classes #}
     <p class="mb-2">Check out my <a href="{% url 'about' %}" class="text-blue-600 hover:text-blue-800 font-medium">About</a> page</p>
     {% if not user.is_authenticated %}
         <p class="mb-2">Check out my <a href="{% url 'users:register' %}" class="text-blue-600 hover:text-blue-800 font-medium">Register a new user</a> page</p>

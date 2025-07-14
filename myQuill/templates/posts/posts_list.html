@@ -3,27 +3,25 @@
 {% load tz %} {# Keep load tz if you use it for timezone formatting #}
 
 {% block title %}
-    Posts
-{% endblock %}
+    Quill Posts
+{% endblock %} {# Updated title block #}
 
 {% block content %}
-{# REMOVED: Tailwind CSS CDN and Google Fonts should ONLY be in layout.html. #}
-{# REMOVED: Inline <style> block should be in your custom style.css file. #}
 <style>
     /* Custom style for checkbox to make it visually align better with Tailwind */
     input[type="checkbox"] {
         width: 1rem; /* 16px */
         height: 1rem; /* 16px */
-        color: var(--link-color); /* Use variable for checkbox color */
-        background-color: var(--input-bg); /* Use variable for background */
-        border-color: var(--input-border); /* Use variable for border */
+        color: var(--link-color); /* indigo-600 */
+        background-color: var(--input-bg); /* gray-100 */
+        border-color: var(--input-border); /* gray-300 */
         border-radius: 0.25rem; /* rounded */
     }
     label {
         display: block; /* Ensure labels are block level for better spacing */
         font-size: 0.875rem; /* text-sm */
         font-weight: 500; /* font-medium */
-        color: var(--card-text); /* Use variable for label color */
+        color: var(--card-text); /* text-gray-700 */
         margin-bottom: 0.5rem; /* mb-2 */
     }
     /* Styles for input/select/textarea within this template, if not covered by global rules */
@@ -37,7 +35,6 @@
 
 <div class="flex flex-col md:flex-row gap-8 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
     {# Filter Sidebar #}
-    {# CORRECTED: Added content-card and removed hardcoded bg-white and text colors #}
     <div class="filter-sidebar w-full md:w-1/4 shadow-lg rounded-lg p-6 h-fit sticky top-4 content-card">
         <h3 class="text-2xl font-bold mb-6">🔍 Filter Options</h3>
         <form id="filter-form" method="get" class="space-y-6">
@@ -93,8 +90,8 @@
 
     {# Posts Section #}
     <div class="posts-section flex-1 w-full">
-        {# CORRECTED: Removed hardcoded text color #}
-        <h1 class="text-3xl font-extrabold mb-8 text-center md:text-left">📝 All Posts</h1>
+        {# Renamed main heading #}
+        <h1 class="text-3xl font-extrabold mb-8 text-center md:text-left">📝 Quill Posts</h1>
         {# This div will be updated by AJAX #}
         <div id="post-list" class="space-y-8">
             {% include 'posts/_posts_partial.html' %}
@@ -162,11 +159,3 @@
     });
 </script>
 {% endblock %}
-
-{# REMOVED: These blocks are invalid here. They should be defined in layout.html if needed. #}
-{# {% block extra_css %} #}
-{#     <link rel="stylesheet" href="{% static 'css/custom.css' %}"> #}
-{# {% endblock %} #}
-{# {% block extra_js %} #}
-{#     <script src="{% static 'js/custom.js' %}"></script> #}
-{# {% endblock %} #}

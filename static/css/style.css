@@ -7,23 +7,23 @@
     box-sizing: border-box;
 }
 
-/* Theme Variables */
+/* Theme Variables (These are now mostly for reference in JS, or for elements not directly styled by JS) */
 :root {
-    --bg-color: #ffffff;
-  --text-color: #1f2937;
-    --link-color: #007bff;
-    --nav-bg: #f1f1f1;
-    --card-bg: #ffffff;
-    --card-text: #374151;
-    --border-color: #e2e8f0;
+    --bg-color: #f3f4f6; /* Light gray background for body */
+    --text-color: #000000; /* Black text for body */
+    --link-color: #007bff; /* Blue link color */
+    --nav-bg: #f1f1f1; /* Navbar light background */
+    --card-bg: #ffffff; /* White background for cards */
+    --card-text: #374151; /* Dark gray text for cards */
+    --border-color: #e2e8f0; /* Borders */
     --input-bg: #ffffff;
     --input-text: #374151;
     --input-border: #d1d5db;
-    --button-bg: #4a5568; /* Default button background */
-    --button-text: #ffffff; /* Default button text */
+    --button-bg: #4a5568;
+    --button-text: #ffffff;
 }
 
-.dark-mode {
+.dark-mode { /* These variables will be used by JS to set inline styles */
     --bg-color: #121212;
     --text-color: #f1f1f1;
     --link-color: #80d0ff;
@@ -34,23 +34,20 @@
     --input-bg: #2d3748;
     --input-text: #f1f1f1;
     --input-border: #4a5568;
-    --button-bg: #6366f1; /* Dark mode button background (e.g., indigo) */
+    --button-bg: #6366f1;
     --button-text: #ffffff;
 }
 
-/* Base Styles */
+/* Base Styles (Body background/color now handled by JS inline style) */
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
     min-height: 100vh;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Keep transition for smoothness */
 }
 
-/* Links */
+/* Links (Color now handled by JS inline style on 'a' tags) */
 a {
-    color: var(--link-color);
     text-decoration: none;
     transition: opacity 0.3s;
 }
@@ -58,96 +55,70 @@ a:hover {
     opacity: 0.85;
 }
 
-/* Navbar */
+/* Navbar (Background/color now handled by JS inline style) */
 .navbar {
-    background-color: var(--nav-bg);
-    border-bottom: 1px solid var(--border-color);
     /* Other navbar styles (display, padding, etc.) can remain as direct CSS or Tailwind */
+    border-bottom: 1px solid var(--border-color); /* Keep border variable */
 }
 
-/* Theme Toggle Button Specific Styling */
-#theme-toggle {
-    background-color: var(--button-bg); /* Use variable for background */
-    color: var(--button-text); /* Use variable for text color */
-    border: 1px solid var(--border-color); /* Use variable for border */
-    /* Hover styles can still be Tailwind or custom CSS */
-    /* The hover:bg-gray-600 will override if not careful.
-       Consider removing hover:bg-gray-600 from HTML and adding a custom hover rule here: */
-    /* &:hover { background-color: var(--button-hover-bg); } */
-}
-/* If you want the hover to also be theme-aware: */
-.dark-mode #theme-toggle:hover {
-    background-color: var(--link-color); /* Example: hover to link color in dark mode */
-}
-/* If you keep hover:bg-gray-600 in HTML, it will always be gray-600 on hover. */
-
-
-/* General Section/Card Styling */
+/* General Section/Card Styling (Background/color now handled by JS inline style) */
 .content-card {
-    background-color: var(--card-bg);
-    color: var(--card-text);
-    border: 1px solid var(--border-color);
+    /* Other styles like shadow, rounded-lg, mx-auto, p-8 can remain as Tailwind classes in HTML */
+    border: 1px solid var(--border-color); /* Keep border variable */
 }
 
-/* Input/Select/Textarea Styling */
+/* Input/Select/Textarea Styling (Background/color/border now handled by JS inline style) */
 input:not([type="checkbox"]):not([type="radio"]),
 select,
 textarea {
-    background-color: var(--input-bg);
-    color: var(--input-text);
-    border-color: var(--input-border);
+    /* Other styles like padding, font-size, border-radius can remain as Tailwind classes in HTML */
 }
 
-/* Custom style for checkbox */
+/* Custom style for checkbox (Background/color/border now handled by JS inline style) */
 input[type="checkbox"] {
     width: 1rem;
     height: 1rem;
-    color: var(--link-color);
-    background-color: var(--input-bg);
-    border-color: var(--input-border);
     border-radius: 0.25rem;
 }
 
-/* Labels */
+/* Labels (Color now handled by JS inline style) */
 label {
-    color: var(--card-text);
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
 }
 
-/* Headings (ensure they use text-color or card-text) */
+/* Headings (Color now handled by JS inline style) */
 h1, h2, h3, h4, h5, h6 {
-    color: var(--text-color);
-}
-.content-card h1, .content-card h2, .content-card h3, .content-card h4, .content-card h5, .content-card h6 {
-    color: var(--card-text);
+    /* No direct color property here, rely on JS or inherited body color */
 }
 
-/* Post list article cards */
+/* Post list article cards (Background/color/border now handled by JS inline style) */
 .post-article-card {
-    background-color: var(--card-bg);
-    color: var(--card-text);
+    /* Other styles like shadow, rounded-lg, overflow-hidden, transition can remain as Tailwind classes in HTML */
     border: 1px solid var(--border-color);
 }
 .post-article-card h2 a {
-    color: var(--link-color);
+    color: var(--link-color); /* Link color for post titles still from CSS variable */
 }
 .post-article-card p {
-    color: var(--card-text);
-}
-/* For categories/tags in post list */
-.category-tag-span { /* Use this class in HTML instead of bg-blue-100/bg-green-100 */
-    background-color: var(--link-color); /* Example: use link color for tags */
-    color: var(--bg-color); /* Example: use background color for tag text */
+    /* No direct color property here, rely on JS or inherited card color */
 }
 
-/* Comments */
-.comment-card { /* Give your comment div in _comment_list.html this class */
-    background-color: var(--card-bg);
-    color: var(--card-text);
+/* For categories/tags in post list (Background/color now handled by JS inline style) */
+.category-tag-span {
+    /* No direct background/color here, rely on JS */
+}
+
+/* Comments (Background/color/border now handled by JS inline style) */
+.comment-card {
+    /* Other styles like padding, rounded-lg, shadow-sm can remain as Tailwind classes in HTML */
     border: 1px solid var(--border-color);
 }
 .comment-card p {
-    color: var(--card-text);
+    /* No direct color property here, rely on JS or inherited card color */
 }
-.comment-card p span { /* For "By:" text */
-    color: var(--card-text);
+.comment-card p span {
+    /* No direct color property here, rely on JS or inherited card color */
 }
